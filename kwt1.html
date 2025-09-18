@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Kwitansi Pembayaran</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3f6fa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      max-width: 900px;
+      width: 100%;
+    }
+    h1 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: #2c3e50;
+      margin-bottom: 25px;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+    .form-section h2 {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #34495e;
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 5px;
+      margin-bottom: 15px;
+      justify-content: flex-start;
+    }
+    label {
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+      color: #555;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+    input:hover, input:focus {
+      border-color: #3498db;
+      box-shadow: 0 0 6px rgba(52,152,219,0.4);
+      outline: none;
+    }
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      background: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    button:hover {
+      background: #2980b9;
+      transform: scale(1.02);
+    }
+    #preview {
+      display: none;
+      margin-top: 25px;
+      padding: 20px;
+      border: 2px dashed #3498db;
+      border-radius: 10px;
+      background: #f9fcff;
+    }
+    #preview h3 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 0;
+      color: #2c3e50;
+    }
+    #preview p {
+      margin: 6px 0;
+      font-size: 14px;
+    }
+    #downloadBtn {
+      margin-top: 10px;
+      background: #27ae60;
+    }
+    #downloadBtn:hover {
+      background: #1e8449;
+    }
+    /* Responsif untuk HP */
+    @media (max-width: 768px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🧾 Kwitansi Pembayaran</h1>
+    <form id="kwitansiForm">
+      <div class="form-grid">
+        <!-- Kolom Kiri -->
+        <div class="form-section">
+          <h2>📑 Data Kwitansi</h2>
+          <label>Nomor Bukti Kwitansi:</label>
+          <input type="text" name="nomor_bukti" required>
+
+          <label>Tanggal:</label>
+          <input type="date" name="tanggal" required>
+
+          <label>Uraian:</label>
+          <input type="text" name="uraian" required>
+
+          <label>Nilai:</label>
+          <input type="number" name="nilai" required>
+        </div>
+
+        <!-- Kolom Kanan -->
+        <div class="form-section">
+          <h2>📌 Data Penerima</h2>
+          <label>Nama:</label>
+          <input type="text" name="nama" required>
+
+          <label>Alamat:</label>
+          <input type="text" name="alamat" required>
+
+          <label>Nomor Rekening:</label>
+          <input type="text" name="norek" required>
+
+          <label>Nama Bank:</label>
+          <input type="text" name="bank" required>
+
+          <label>NPWP:</label>
+          <input type="text" name="npwp">
+        </div>
+      </div>
+      <button type="button" id="previewBtn">🔎 Preview Data</button>
+    </form>
+
+    <div id="preview">
+      <h3>📄 Preview Kwitansi</h3>
+      <div id="previewContent"></div>
+      <button id="confirmBtn">✅ Konfirmasi Simpan</button>
+      <button id="downloadBtn" style="display:none;">⬇️ Download PDF</button>
+    </div>
+  </div>
+
+  <script>
+    let formDataObj = {};
+
+    document.getElementById("previewBtn").addEventListener("click", function() {
+      const form = document.getElementById("kwitansiForm");
+      const formData = new FormData(form);
+      formDataObj = {};
+      formData.forEach((value, key) => formDataObj[key] = value);
+
+      let previewHTML = `
+        <p><b>Nomor Bukti:</b> ${formDataObj.nomor_bukti}</p>
+        <p><b>Tanggal:</b> ${formDataObj.tanggal}</p>
+        <p><b>Uraian:</b> ${formDataObj.uraian}</p>
+        <p><b>Nilai:</b> Rp ${formDataObj.nilai}</p>
+        <h4>Data Penerima</h4>
+        <p><b>Nama:</b> ${formDataObj.nama}</p>
+        <p><b>Alamat:</b> ${formDataObj.alamat}</p>
+        <p><b>No Rekening:</b> ${formDataObj.norek}</p>
+        <p><b>Bank:</b> ${formDataObj.bank}</p>
+        <p><b>NPWP:</b> ${formDataObj.npwp}</p>
+      `;
+
+      document.getElementById("previewContent").innerHTML = previewHTML;
+      document.getElementById("preview").style.display = "block";
+    });
+
+    document.getElementById("confirmBtn").addEventListener("click", function() {
+      fetch("https://script.google.com/macros/s/AKfycbztuHWo5OqULegEK3ZR9fBNZISB1YxJrj5L1L0dHp9rlXz4cFuWj6qvvkKcvwbwSAiFbA/exec", {
+        method: "POST",
+        body: JSON.stringify(formDataObj)
+      })
+      .then(res => res.json())
+      .then(res => {
+        if (res.result === "success") {
+          alert("✅ Data telah terkirim");
+          document.getElementById("downloadBtn").style.display = "block";
+        } else {
+          alert("⚠️ Gagal menyimpan: " + res.error);
+        }
+      })
+      .catch(err => alert("❌ Error: " + err));
+    });
+
+    document.getElementById("downloadBtn").addEventListener("click", function() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.setFontSize(14);
+      doc.text("Kwitansi Pembayaran", 20, 20);
+      doc.setFontSize(12);
+
+      let y = 40;
+      for (let [key, value] of Object.entries(formDataObj)) {
+        doc.text(`${key}: ${value}`, 20, y);
+        y += 10;
+      }
+
+      doc.save("kwitansi.pdf");
+    });
+  </script>
+</body>
+</html>
