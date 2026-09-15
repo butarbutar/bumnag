@@ -2,147 +2,406 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Dashboard Kwitansi</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pemerintah Nagari Bumi Nagari</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --primary: #0f766e;
+      --primary-dark: #0b4f49;
+      --accent: #f59e0b;
+      --background: #f5f8f8;
+      --text: #1f2933;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
-      background: #f5f7fb;
+      background: var(--background);
+      color: var(--text);
+      line-height: 1.6;
     }
-    .navbar {
-      background: #3498db;
-      color: white;
-      padding: 15px;
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(15, 118, 110, 0.95);
+      backdrop-filter: blur(6px);
+      box-shadow: 0 6px 16px rgba(15, 118, 110, 0.15);
+    }
+
+    .container {
+      width: min(1100px, 92vw);
+      margin: auto;
+    }
+
+    nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 18px 0;
     }
-    .navbar h1 {
+
+    nav .brand {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    nav .brand img {
+      width: 42px;
+      height: 42px;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 22px;
+      padding: 0;
       margin: 0;
-      font-size: 20px;
     }
-    .sidebar {
-      position: fixed;
-      top: 60px;
-      left: 0;
-      width: 200px;
-      height: 100%;
-      background: #2c3e50;
-      color: white;
-      padding-top: 20px;
-    }
-    .sidebar a {
-      display: block;
-      color: white;
-      padding: 12px;
+
+    nav a {
+      color: #fff;
       text-decoration: none;
-      transition: background 0.3s;
+      font-weight: 500;
+      transition: opacity 0.2s ease, transform 0.2s ease;
     }
-    .sidebar a:hover {
-      background: #34495e;
+
+    nav a:hover {
+      opacity: 0.85;
+      transform: translateY(-1px);
     }
-    .main {
-      margin-left: 200px;
-      padding: 20px;
+
+    .hero {
+      position: relative;
+      background: linear-gradient(135deg, rgba(15, 118, 110, 0.85), rgba(15, 118, 110, 0.75)), url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=80') center/cover;
+      color: #fff;
+      padding: 120px 0 140px;
+      text-align: center;
     }
-    .cards {
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 5vw, 3.4rem);
+      margin-bottom: 16px;
+      font-weight: 700;
+    }
+
+    .hero p {
+      font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+      max-width: 720px;
+      margin: 0 auto 28px;
+    }
+
+    .hero .cta-group {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 22px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .button.primary {
+      background: var(--accent);
+      color: #1f2933;
+      box-shadow: 0 12px 30px rgba(245, 158, 11, 0.35);
+    }
+
+    .button.secondary {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+
+    .button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 18px 34px rgba(0, 0, 0, 0.12);
+    }
+
+    section {
+      padding: 70px 0;
+    }
+
+    section h2 {
+      font-size: clamp(2rem, 4vw, 2.4rem);
+      margin-bottom: 12px;
+      text-align: center;
+      color: var(--primary-dark);
+    }
+
+    section p.section-lead {
+      text-align: center;
+      margin: 0 auto 48px;
+      max-width: 640px;
+      color: #64748b;
+    }
+
+    .profile-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 28px;
+      align-items: center;
     }
-    .card {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+
+    .profile-card {
+      background: #fff;
+      border-radius: 18px;
+      padding: 26px;
+      box-shadow: 0 16px 38px rgba(15, 118, 110, 0.08);
     }
-    .card h3 {
-      margin: 0 0 10px;
-      font-size: 18px;
-      color: #2c3e50;
+
+    .profile-card h3 {
+      margin-top: 0;
+      color: var(--primary);
     }
-    .card p {
-      font-size: 16px;
-      color: #555;
+
+    .values {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 12px;
     }
-    table {
+
+    .values li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #f0fdfa;
+      padding: 12px 16px;
+      border-radius: 12px;
+    }
+
+    .values span.icon {
+      font-size: 1.4rem;
+    }
+
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+
+    .news-card {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 14px 32px rgba(15, 118, 110, 0.08);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .news-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 38px rgba(15, 118, 110, 0.18);
+    }
+
+    .news-card img {
       width: 100%;
-      border-collapse: collapse;
-      margin-top: 25px;
+      height: 180px;
+      object-fit: cover;
     }
-    table th, table td {
-      border: 1px solid #ddd;
-      padding: 10px;
-      text-align: left;
+
+    .news-card .content {
+      padding: 20px;
     }
-    table th {
-      background: #3498db;
-      color: white;
+
+    .news-card h3 {
+      margin: 0 0 10px;
+      color: var(--primary-dark);
+      font-size: 1.15rem;
     }
-    table tr:nth-child(even) {
-      background: #f9f9f9;
+
+    .news-card p {
+      margin: 0 0 16px;
+      color: #556278;
+    }
+
+    .news-card a {
+      text-decoration: none;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .info-bar {
+      background: var(--primary);
+      color: #fff;
+      padding: 26px 0;
+    }
+
+    .info-items {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 18px;
+      text-align: center;
+    }
+
+    .info-items h4 {
+      margin: 0 0 4px;
+      font-size: 1.15rem;
+    }
+
+    footer {
+      background: #0f172a;
+      color: rgba(255, 255, 255, 0.7);
+      padding: 36px 0 28px;
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    @media (max-width: 720px) {
+      nav ul {
+        display: none;
+      }
+
+      .hero {
+        padding: 100px 0 120px;
+      }
+
+      .profile-card {
+        text-align: center;
+      }
+
+      .values li {
+        justify-content: center;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="navbar">
-    <h1>💼 Dashboard Kwitansi</h1>
-    <div>Halo, Admin</div>
-  </div>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="brand">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/9/9d/Coat_of_arms_of_West_Sumatra.png" alt="Lambang Nagari">
+          <div>Pemerintah Nagari Bumi Nagari</div>
+        </div>
+        <ul>
+          <li><a href="#beranda">Beranda</a></li>
+          <li><a href="#profil">Profil</a></li>
+          <li><a href="#berita">Berita</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
 
-  <div class="sidebar">
-    <a href="https://butarbutar.github.io/bumnag/">🏠 Home</a>
-    <a href="https://butarbutar.github.io/bumnag/kwtpembayaran.html">🧾 Input Kwitansi</a>
-    <a href="#">📊 Data Kwitansi</a>
-    <a href="#">📑 Laporan</a>
-  </div>
+  <main>
+    <section class="hero" id="beranda">
+      <div class="container">
+        <h1>Terwujudnya Nagari Mandiri, Sejahtera, dan Lestari</h1>
+        <p>Pemerintah Nagari Bumi Nagari berkomitmen menghadirkan pelayanan publik yang profesional, transparan, dan mengedepankan kearifan lokal demi kesejahteraan masyarakat.</p>
+        <div class="cta-group">
+          <a class="button primary" href="#profil">Lihat Profil Nagari</a>
+          <a class="button secondary" href="#berita">Informasi Terbaru</a>
+        </div>
+      </div>
+    </section>
 
-  <div class="main">
-    <h2>📊 Ringkasan</h2>
-    <div class="cards">
-      <div class="card">
-        <h3>Jumlah Kwitansi</h3>
-        <p>25</p>
+    <section id="profil">
+      <div class="container">
+        <h2>Profil Nagari</h2>
+        <p class="section-lead">Nagari Bumi Nagari adalah sebuah nagari agraris di Kabupaten Sungai Harapan yang kaya akan potensi alam, adat, dan budaya yang terus dijaga serta dikembangkan secara berkelanjutan.</p>
+        <div class="profile-grid">
+          <div class="profile-card">
+            <h3>Visi</h3>
+            <p>"Nagari Mandiri, Berdaya Saing, Berbudaya, dan Berlandaskan Adat Basandi Syarak, Syarak Basandi Kitabullah."</p>
+          </div>
+          <div class="profile-card">
+            <h3>Misi</h3>
+            <ul class="values">
+              <li><span class="icon">🌾</span> Meningkatkan perekonomian masyarakat berbasis pertanian dan UMKM.</li>
+              <li><span class="icon">📚</span> Memperkuat pelayanan publik yang transparan dan akuntabel.</li>
+              <li><span class="icon">🌱</span> Melestarikan lingkungan dan sumber daya alam nagari.</li>
+              <li><span class="icon">🤝</span> Menguatkan adat, budaya, dan partisipasi masyarakat.</li>
+            </ul>
+          </div>
+          <div class="profile-card">
+            <h3>Pemerintahan Nagari</h3>
+            <p>Wali Nagari: Sutan Dirajo<br> Sekretaris Nagari: Fitri Anggraini<br> Perangkat: 4 Jorong, Bamus, dan Lembaga Adat Nagari.</p>
+          </div>
+        </div>
       </div>
-      <div class="card">
-        <h3>Total Nilai</h3>
-        <p>Rp 50.000.000</p>
+    </section>
+
+    <section id="berita">
+      <div class="container">
+        <h2>Berita & Informasi Terbaru</h2>
+        <p class="section-lead">Ikuti perkembangan kegiatan dan program Pemerintah Nagari melalui berita terkini yang kami sajikan untuk masyarakat.</p>
+        <div class="news-grid">
+          <article class="news-card">
+            <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80" alt="Rapat Nagari">
+            <div class="content">
+              <h3>Musyawarah Nagari 2025 Menetapkan Prioritas Pembangunan</h3>
+              <p>Musyawarah Nagari menetapkan peningkatan irigasi dan revitalisasi pasar sebagai program unggulan 2025.</p>
+              <a href="#">Baca selengkapnya →</a>
+            </div>
+          </article>
+          <article class="news-card">
+            <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=900&q=80" alt="Pelatihan UMKM">
+            <div class="content">
+              <h3>Pelatihan Digital Marketing untuk Pelaku UMKM Nagari</h3>
+              <p>Pelaku UMKM mendapatkan pendampingan pemasaran digital untuk memperluas jangkauan produk unggulan nagari.</p>
+              <a href="#">Baca selengkapnya →</a>
+            </div>
+          </article>
+          <article class="news-card">
+            <img src="https://images.unsplash.com/photo-1514996937319-344454492b37?auto=format&fit=crop&w=900&q=80" alt="Gotong Royong">
+            <div class="content">
+              <h3>Gerakan Gotong Royong Bersih Nagari</h3>
+              <p>Partisipasi pemuda dan ibu-ibu PKK dalam membersihkan lingkungan menjadi agenda rutin tiap bulan.</p>
+              <a href="#">Baca selengkapnya →</a>
+            </div>
+          </article>
+        </div>
       </div>
-      <div class="card">
-        <h3>Kwitansi Terbaru</h3>
-        <p>#KW-0025</p>
+    </section>
+  </main>
+
+  <div class="info-bar">
+    <div class="container info-items">
+      <div>
+        <h4>Pelayanan Publik</h4>
+        <div>Senin - Jumat: 08.00 - 15.30 WIB</div>
+      </div>
+      <div>
+        <h4>Lokasi Kantor</h4>
+        <div>Jl. Raya Utama No. 10, Nagari Bumi Nagari</div>
+      </div>
+      <div>
+        <h4>Kontak</h4>
+        <div>Telepon: (0752) 123456 • Email: info@buminagari.go.id</div>
       </div>
     </div>
-
-    <h2>🧾 Data Kwitansi Terbaru</h2>
-    <table>
-      <tr>
-        <th>No Bukti</th>
-        <th>Tanggal</th>
-        <th>Uraian</th>
-        <th>Nilai</th>
-        <th>Penerima</th>
-      </tr>
-      <tr>
-        <td>KW-0025</td>
-        <td>2025-09-19</td>
-        <td>Pembayaran Honor</td>
-        <td>Rp 2.500.000</td>
-        <td>Budi</td>
-      </tr>
-      <tr>
-        <td>KW-0024</td>
-        <td>2025-09-18</td>
-        <td>Pengadaan Barang</td>
-        <td>Rp 5.000.000</td>
-        <td>Siti</td>
-      </tr>
-    </table>
   </div>
+
+  <footer>
+    <div class="container">
+      &copy; 2025 Pemerintah Nagari Bumi Nagari. Dibangun dengan semangat kebersamaan. <a href="mailto:info@buminagari.go.id">Hubungi Kami</a>
+    </div>
+  </footer>
 </body>
 </html>
-
-
-
-
